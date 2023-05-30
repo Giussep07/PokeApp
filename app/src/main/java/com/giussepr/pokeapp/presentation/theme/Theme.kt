@@ -1,4 +1,4 @@
-package com.giussepr.pokeapp.ui.theme
+package com.giussepr.pokeapp.presentation.theme
 
 import android.app.Activity
 import android.os.Build
