@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.apollo)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.hilt.gradle)
 }
 
 android {
@@ -30,11 +33,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -61,6 +64,21 @@ dependencies {
     androidTestImplementation(libs.androidx.navigation.testing)
     // Lottie
     implementation(libs.lottie.compose)
+    // Logging interceptor
+    implementation(libs.logging.interceptor)
+    // Apollo GraphQL
+    implementation(libs.apollo.runtime)
+
+    // Hilt Dependency Injection
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    kapt(libs.hilt.compiler)
+    // Hilt and instrumented tests.
+    androidTestImplementation(libs.hilt.android.testing)
+    kaptAndroidTest(libs.hilt.android.compiler)
+    // Hilt and Robolectric tests.
+    testImplementation(libs.hilt.android.testing)
+    kaptTest(libs.hilt.android.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
@@ -68,4 +86,10 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+}
+
+apollo {
+    service("service") {
+        packageName.set("com.giussepr.pokeserver")
+    }
 }
