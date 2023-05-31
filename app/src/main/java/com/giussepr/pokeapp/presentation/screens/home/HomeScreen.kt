@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.giussepr.pokeapp.presentation.screens.home
 
 import androidx.compose.foundation.background
@@ -70,6 +68,7 @@ fun HomeScreenPreview() {
     ), onUiEvent = {}, onNavigateToDetails = {})
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     uiState: HomeViewModel.HomeUiState,

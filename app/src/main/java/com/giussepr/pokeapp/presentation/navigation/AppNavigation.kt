@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.giussepr.pokeapp.presentation.screens.home.HomeScreen
 import com.giussepr.pokeapp.presentation.screens.home.HomeViewModel
 import com.giussepr.pokeapp.presentation.screens.pokemondetail.PokemonDetailScreen
+import com.giussepr.pokeapp.presentation.screens.pokemondetail.PokemonDetailSharedViewModel
 import com.giussepr.pokeapp.presentation.screens.splash.SplashScreen
 
 @Composable
@@ -15,6 +16,8 @@ fun AppNavigation(
     navController: NavHostController,
     startDestination: String = AppScreens.SplashScreen.route
 ) {
+    val pokemonDetailSharedViewModel: PokemonDetailSharedViewModel = hiltViewModel()
+
     NavHost(navController = navController, startDestination = startDestination) {
         composable(AppScreens.SplashScreen.route) {
             SplashScreen(navController)
@@ -23,13 +26,17 @@ fun AppNavigation(
             val homeViewModel: HomeViewModel = hiltViewModel()
             HomeScreen(
                 uiState = homeViewModel.uiState,
-                onUiEvent = homeViewModel::onUiEvent,
-                onNavigateToDetails = {
-                    navController.navigate(AppScreens.PokemonDetail.route)
-                })
+                onUiEvent = homeViewModel::onUiEvent
+            ) { pokemon ->
+                pokemonDetailSharedViewModel.addPokemonDetail(pokemon)
+                navController.navigate(AppScreens.PokemonDetail.route)
+            }
         }
         composable(AppScreens.PokemonDetail.route) {
-            PokemonDetailScreen()
+            PokemonDetailScreen(
+                pokemonDetailSharedViewModel.pokemonDetail,
+                onNavigateUp = navController::navigateUp
+            )
         }
     }
 }
