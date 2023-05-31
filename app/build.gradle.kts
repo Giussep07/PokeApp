@@ -80,6 +80,9 @@ dependencies {
     testImplementation(libs.hilt.android.testing)
     kaptTest(libs.hilt.android.compiler)
 
+    // Coil
+    implementation(libs.coil)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)

@@ -16,6 +16,7 @@ hilt = "2.44"
 androidxHilt = "1.0.0"
 loggingInterceptor = "4.11.0"
 apolloGraphQl = "3.8.2"
+coil = "2.2.2"
 
 [libraries]
 # AndroidX
@@ -52,6 +53,9 @@ hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", ve
 hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 hilt-gradle-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
+
+# Coil
+coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
 # Test
 androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidxTestExt" }
