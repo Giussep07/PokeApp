@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.giussepr.pokeapp.domain.model.ListViewType
 import com.giussepr.pokeapp.domain.model.pokemon.Pokemon
 import com.giussepr.pokeapp.domain.model.fold
 import com.giussepr.pokeapp.domain.usecase.GetPokemonsUseCase
@@ -38,10 +39,18 @@ class HomeViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
+    private fun ListViewType.change() = when (this) {
+        ListViewType.LIST -> ListViewType.GRID
+        ListViewType.GRID -> ListViewType.LIST
+    }
+
     fun onUiEvent(uiEvent: HomeUiEvent) {
         when (uiEvent) {
             is HomeUiEvent.LoadPokemons -> {
                 onLoadPokemons()
+            }
+            is HomeUiEvent.ChangeListViewType -> {
+                uiState = uiState.copy(listViewType = uiState.listViewType.change())
             }
         }
     }
@@ -50,9 +59,11 @@ class HomeViewModel @Inject constructor(
         val isLoading: Boolean = false,
         val pokemons: List<Pokemon> = emptyList(),
         val errorMessage: String = "",
+        val listViewType: ListViewType = ListViewType.LIST
     )
 
     sealed class HomeUiEvent {
         object LoadPokemons : HomeUiEvent()
+        object ChangeListViewType : HomeUiEvent()
     }
 }

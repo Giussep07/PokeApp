@@ -2,6 +2,7 @@
 
 package com.giussepr.pokeapp.presentation.widgets
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -20,36 +21,18 @@ import com.giussepr.pokeapp.R
 @Composable
 @Preview
 fun PokeAppTopAppBarPreview() {
-    PokeAppTopAppBar(rememberNavController())
+    PokeAppTopAppBar()
 }
 
 @Composable
 fun PokeAppTopAppBar(
-    navController: NavHostController,
     title: String = stringResource(id = R.string.app_name),
-    onListTypeClicked: () -> Unit = {}
+    navigationIcon: @Composable () -> Unit = {},
+    actions: @Composable RowScope.() -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
         title = { Text(text = title) },
-        navigationIcon = {
-            if (navController.previousBackStackEntry != null) {
-                IconButton(onClick = { navController.navigateUp() }) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Localized description"
-                    )
-                }
-            }
-        },
-        actions = {
-            if (navController.previousBackStackEntry == null) {
-                IconButton(onClick = onListTypeClicked) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_grid_view),
-                        contentDescription = null
-                    )
-                }
-            }
-        }
+        navigationIcon = navigationIcon,
+        actions = actions
     )
 }

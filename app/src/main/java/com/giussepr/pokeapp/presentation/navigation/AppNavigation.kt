@@ -1,20 +1,35 @@
 package com.giussepr.pokeapp.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.giussepr.pokeapp.presentation.screens.home.HomeScreen
+import com.giussepr.pokeapp.presentation.screens.home.HomeViewModel
+import com.giussepr.pokeapp.presentation.screens.pokemondetail.PokemonDetailScreen
 import com.giussepr.pokeapp.presentation.screens.splash.SplashScreen
 
 @Composable
-fun AppNavigation(navController: NavHostController, startDestination: String = AppScreens.SplashScreen.route) {
+fun AppNavigation(
+    navController: NavHostController,
+    startDestination: String = AppScreens.SplashScreen.route
+) {
     NavHost(navController = navController, startDestination = startDestination) {
         composable(AppScreens.SplashScreen.route) {
             SplashScreen(navController)
         }
         composable(AppScreens.Home.route) {
-            HomeScreen(navController)
+            val homeViewModel: HomeViewModel = hiltViewModel()
+            HomeScreen(
+                uiState = homeViewModel.uiState,
+                onUiEvent = homeViewModel::onUiEvent,
+                onNavigateToDetails = {
+                    navController.navigate(AppScreens.PokemonDetail.route)
+                })
+        }
+        composable(AppScreens.PokemonDetail.route) {
+            PokemonDetailScreen()
         }
     }
 }

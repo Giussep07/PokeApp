@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.giussepr.pokeapp.presentation.widgets
 
 import androidx.compose.foundation.Image
@@ -55,7 +53,7 @@ fun PokemonCardItemPreview() {
                     PokemonType(2, "Poison", PokemonTypeAsset.Poison)
                 )
             )
-        )
+        ) {}
     }
 }
 
@@ -73,28 +71,30 @@ fun PokemonCardItemColumnPreview() {
                     PokemonType(2, "Poison", PokemonTypeAsset.Poison)
                 )
             )
-        )
+        ) {}
     }
 }
 
 @Composable
-fun PokemonCardItem(pokemon: Pokemon, listViewType: ListViewType = ListViewType.LIST) {
+fun PokemonCardItem(pokemon: Pokemon, listViewType: ListViewType = ListViewType.LIST, onCardClicked: (Pokemon) -> Unit) {
     if (listViewType == ListViewType.LIST) {
-        PokemonCardItemRow(pokemon = pokemon)
+        PokemonCardItemRow(pokemon = pokemon, onCardClicked = onCardClicked)
     } else {
-        PokemonCardItemColumn(pokemon = pokemon)
+        PokemonCardItemColumn(pokemon = pokemon, onCardClicked = onCardClicked)
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PokemonCardItemRow(pokemon: Pokemon) {
+fun PokemonCardItemRow(pokemon: Pokemon, onCardClicked: (Pokemon) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(152.dp),
         colors = CardDefaults.cardColors(
-            containerColor = pokemon.types.first().asset.backgroundColor
-        )
+            containerColor = pokemon.types.firstOrNull()?.asset?.backgroundColor ?: Color.LightGray
+        ),
+        onClick = { onCardClicked(pokemon) }
     ) {
         Box {
             Image(
@@ -107,7 +107,9 @@ fun PokemonCardItemRow(pokemon: Pokemon) {
                     .align(Alignment.CenterEnd),
             )
             Row(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
             ) {
                 Column(
                     modifier = Modifier.weight(1f)
@@ -153,15 +155,17 @@ fun PokemonCardItemRow(pokemon: Pokemon) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PokemonCardItemColumn(pokemon: Pokemon) {
+fun PokemonCardItemColumn(pokemon: Pokemon, onCardClicked: (Pokemon) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(300.dp),
         colors = CardDefaults.cardColors(
-            containerColor = pokemon.types.first().asset.backgroundColor
-        )
+            containerColor = pokemon.types.firstOrNull()?.asset?.backgroundColor ?: Color.LightGray
+        ),
+        onClick = { onCardClicked(pokemon) }
     ) {
         Box {
             Image(
@@ -226,6 +230,7 @@ fun PokemonCardImage(pokemon: Pokemon) {
         modifier = Modifier.fillMaxHeight(),
         model = ImageRequest.Builder(LocalContext.current).data(pokemon.imageUrl)
             .crossfade(true).build(),
+        placeholder = painterResource(id = R.drawable.ic_pokeball),
         contentDescription = null
     )
 }
