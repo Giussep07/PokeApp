@@ -1,0 +1,24 @@
+query PokemonMoves($pokemon_id: Int!) {
+    pokemon_v2_move(where: {pokemon_v2_pokemonmoves: { pokemon_v2_pokemon: { id: { _eq: $pokemon_id } } } }) {
+        id
+        accuracy
+        power
+        pp
+        pokemon_v2_movenames(where: {pokemon_v2_language:{name:{_eq:"en"}}}) {
+            name
+        }
+        pokemon_v2_movedamageclass {
+            id
+            name
+        }
+        pokemon_v2_moveeffect {
+            pokemon_v2_moveeffecteffecttexts(where: {pokemon_v2_language:{name:{_eq:"en"}}}) {
+                effect
+            }
+        }
+        pokemon_v2_type {
+            id
+            name
+        }
+    }
+}

@@ -1,0 +1,23 @@
+query PokemonAbout($pokemon_id: Int!) {
+    pokemon_v2_pokemon(where: {id: {_eq: $pokemon_id}}) {
+        id
+        name
+        height
+        weight
+        pokemon_v2_pokemonabilities {
+            pokemon_v2_ability {
+                id
+                name
+            }
+        }
+        pokemon_v2_pokemonspecy {
+            gender_rate
+            hatch_counter
+            pokemon_v2_pokemonegggroups {
+                pokemon_v2_egggroup {
+                    name
+                }
+            }
+        }
+    }
+}
