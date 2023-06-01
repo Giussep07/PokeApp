@@ -31,6 +31,7 @@ import com.giussepr.pokeapp.domain.model.pokemon.PokemonType
 import com.giussepr.pokeapp.domain.model.pokemon.PokemonTypeAsset
 import com.giussepr.pokeapp.domain.model.stats.PokemonStat
 import com.giussepr.pokeapp.presentation.theme.PokeAppTheme
+import com.giussepr.pokeapp.presentation.widgets.ErrorMessage
 import kotlinx.coroutines.delay
 import kotlin.random.Random
 
@@ -115,11 +116,15 @@ fun PokemonBaseStatsContent(
             }
         }
 
-        if (uiState.isLoading.not() && uiState.pokemonBaseStats.isNotEmpty()) {
+        if (uiState.isLoading.not() && uiState.pokemonBaseStats.isNotEmpty() && uiState.error.isEmpty()) {
             PokemonBaseStatsList(
                 pokemon = pokemon,
                 pokemonBaseStats = uiState.pokemonBaseStats
             )
+        }
+
+        if (uiState.isLoading.not() && uiState.error.isEmpty().not()) {
+            ErrorMessage(error = uiState.error)
         }
     }
 }

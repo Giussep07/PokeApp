@@ -18,6 +18,7 @@ import com.giussepr.pokeapp.domain.model.about.PokemonAbility
 import com.giussepr.pokeapp.domain.model.about.PokemonAbout
 import com.giussepr.pokeapp.domain.model.about.PokemonEggGroup
 import com.giussepr.pokeapp.presentation.theme.PokeAppTheme
+import com.giussepr.pokeapp.presentation.widgets.ErrorMessage
 import com.giussepr.pokeapp.presentation.widgets.PokemonDataItemDefaults
 import com.giussepr.pokeapp.presentation.widgets.PokemonDataItemTitle
 
@@ -96,7 +97,7 @@ fun PokemonAboutContent(uiState: PokemonAboutViewModel.PokemonAboutUiState) {
         }
 
 
-        if (uiState.isLoading.not() && uiState.pokemonAbout != null) {
+        if (uiState.isLoading.not() && uiState.pokemonAbout != null && uiState.errorMessage.isEmpty()) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
@@ -134,6 +135,10 @@ fun PokemonAboutContent(uiState: PokemonAboutViewModel.PokemonAboutUiState) {
                     value = "${(uiState.pokemonAbout.hatchCounter.plus(1).times(255))} steps"
                 )
             }
+        }
+
+        if (uiState.isLoading.not() && uiState.errorMessage.isEmpty().not()) {
+            ErrorMessage(error = uiState.errorMessage)
         }
     }
 }

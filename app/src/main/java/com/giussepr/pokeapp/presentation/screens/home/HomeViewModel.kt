@@ -36,7 +36,7 @@ class HomeViewModel @Inject constructor(
                 onFailure = {
                     uiState = uiState.copy(errorMessage = it.message, isLoading = false)
                 })
-        }.onStart { uiState = uiState.copy(isLoading = true) }
+        }.onStart { uiState = uiState.copy(isLoading = true, errorMessage = "") }
             .flowOn(dispatcherProvider.io)
             .launchIn(viewModelScope)
     }

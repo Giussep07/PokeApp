@@ -36,7 +36,7 @@ class PokemonBaseStatsViewModel @Inject constructor(
                 }
             )
 
-        }.onStart { uiState = uiState.copy(isLoading = true) }
+        }.onStart { uiState = uiState.copy(isLoading = true, error = "") }
             .flowOn(dispatcherProvider.io)
             .launchIn(viewModelScope)
     }

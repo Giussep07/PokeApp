@@ -3,6 +3,7 @@ package com.giussepr.pokeapp.di
 import com.apollographql.apollo3.ApolloClient
 import com.giussepr.pokeapp.data.repository.PokemonRepositoryImpl
 import com.giussepr.pokeapp.data.repository.datasource.remote.PokeGraphApi
+import com.giussepr.pokeapp.data.utils.NetworkUtils
 import com.giussepr.pokeapp.domain.repository.PokemonRepository
 import dagger.Module
 import dagger.Provides
@@ -19,7 +20,10 @@ object RepositoryModule {
     }
 
     @Provides
-    fun providePokemonRepository(pokeGraphApi: PokeGraphApi): PokemonRepository {
-        return PokemonRepositoryImpl(pokeGraphApi)
+    fun providePokemonRepository(
+        pokeGraphApi: PokeGraphApi,
+        networkUtils: NetworkUtils
+    ): PokemonRepository {
+        return PokemonRepositoryImpl(pokeGraphApi, networkUtils)
     }
 }

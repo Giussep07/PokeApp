@@ -15,16 +15,19 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giussepr.pokeapp.domain.model.ListViewType
 import com.giussepr.pokeapp.domain.model.pokemon.Pokemon
 import com.giussepr.pokeapp.domain.model.pokemon.PokemonType
 import com.giussepr.pokeapp.domain.model.pokemon.PokemonTypeAsset
+import com.giussepr.pokeapp.presentation.widgets.ErrorMessage
 import com.giussepr.pokeapp.presentation.widgets.ListTypeIconButton
 import com.giussepr.pokeapp.presentation.widgets.PokeAppTopAppBar
 import com.giussepr.pokeapp.presentation.widgets.PokemonCardItem
@@ -64,7 +67,7 @@ fun HomeScreenPreview() {
                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/5.png",
                 listOf(PokemonType(2, "electric", PokemonTypeAsset.Electric))
             )
-        )
+        ),
     ), onUiEvent = {}, onNavigateToDetails = {})
 }
 
@@ -104,8 +107,12 @@ fun HomeScreen(
                 }
             }
 
-            if (!uiState.isLoading) {
+            if (!uiState.isLoading && uiState.errorMessage.isEmpty()) {
                 HomeScreenContent(uiState, uiState.listViewType, onNavigateToDetails)
+            }
+
+            if (uiState.isLoading.not() && uiState.errorMessage.isEmpty().not()) {
+                ErrorMessage(error = uiState.errorMessage)
             }
         }
     }

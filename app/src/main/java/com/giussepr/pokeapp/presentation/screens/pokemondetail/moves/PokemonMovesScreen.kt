@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.giussepr.pokeapp.domain.model.moves.PokemonMove
 import com.giussepr.pokeapp.presentation.theme.PokeAppTheme
+import com.giussepr.pokeapp.presentation.widgets.ErrorMessage
 
 @Preview(showBackground = true)
 @Composable
@@ -101,8 +102,12 @@ fun PokemonMovesContent(
             }
         }
 
-        if (uiState.isLoading.not() && uiState.moves.isNotEmpty()) {
+        if (uiState.isLoading.not() && uiState.moves.isNotEmpty() && uiState.error.isEmpty()) {
             PokemonMovesList(moves = uiState.moves)
+        }
+
+        if (uiState.isLoading.not() && uiState.error.isEmpty().not()) {
+            ErrorMessage(error = uiState.error, modifier = Modifier.padding(top = 16.dp))
         }
     }
 }

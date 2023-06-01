@@ -35,7 +35,7 @@ class PokemonAboutViewModel @Inject constructor(
                     uiState = uiState.copy(errorMessage = it.message, isLoading = false)
                 }
             )
-        }.onStart { uiState = uiState.copy(isLoading = true) }
+        }.onStart { uiState = uiState.copy(isLoading = true, errorMessage = "") }
             .flowOn(dispatcherProvider.io)
             .launchIn(viewModelScope)
     }
@@ -51,7 +51,7 @@ class PokemonAboutViewModel @Inject constructor(
     data class PokemonAboutUiState(
         val isLoading: Boolean = false,
         val pokemonAbout: PokemonAbout? = null,
-        val errorMessage: String? = null
+        val errorMessage: String = ""
     )
 
     sealed class PokemonAboutUiEvent {

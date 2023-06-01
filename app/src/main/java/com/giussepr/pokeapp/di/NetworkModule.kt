@@ -1,11 +1,14 @@
 package com.giussepr.pokeapp.di
 
+import android.content.Context
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.network.okHttpClient
+import com.giussepr.pokeapp.data.utils.NetworkUtils
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import javax.inject.Singleton
@@ -30,4 +33,7 @@ object NetworkModule {
             .okHttpClient(okHttpClient)
             .build()
     }
+
+    @Provides
+    fun provideNetworkUtils(@ApplicationContext context: Context) = NetworkUtils(context)
 }
