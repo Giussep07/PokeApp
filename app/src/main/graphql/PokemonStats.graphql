@@ -1,0 +1,12 @@
+query PokemonStats($pokemon_id: Int!) {
+    pokemon_v2_pokemon(where: {id: {_eq: $pokemon_id}}) {
+        pokemon_v2_pokemonstats {
+            base_stat
+            pokemon_v2_stat {
+                pokemon_v2_statnames(where: { pokemon_v2_language: { name: { _eq: "en"}}}) {
+                    name
+                }
+            }
+        }
+    }
+}

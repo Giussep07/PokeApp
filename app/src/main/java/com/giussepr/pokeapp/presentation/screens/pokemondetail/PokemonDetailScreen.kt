@@ -48,6 +48,8 @@ import com.giussepr.pokeapp.domain.model.pokemon.PokemonType
 import com.giussepr.pokeapp.domain.model.pokemon.PokemonTypeAsset
 import com.giussepr.pokeapp.presentation.screens.pokemondetail.about.PokemonAboutScreen
 import com.giussepr.pokeapp.presentation.screens.pokemondetail.about.PokemonAboutViewModel
+import com.giussepr.pokeapp.presentation.screens.pokemondetail.stats.PokemonBaseStatsScreen
+import com.giussepr.pokeapp.presentation.screens.pokemondetail.stats.PokemonBaseStatsViewModel
 import com.giussepr.pokeapp.presentation.theme.PokeAppTheme
 import com.giussepr.pokeapp.presentation.widgets.BackIconButton
 import com.giussepr.pokeapp.presentation.widgets.PokeAppTopAppBar
@@ -99,7 +101,9 @@ fun PokemonDetailScreenPreview() {
                     ),
                 )
             ),
-            onPokemonAboutUiEvent = {}
+            onPokemonAboutUiEvent = {},
+            pokemonBaseStatsUiState = PokemonBaseStatsViewModel.PokemonBaseStatsUiState(),
+            onPokemonBaseStatsUiEvent = {}
         )
     }
 }
@@ -109,7 +113,9 @@ fun PokemonDetailScreen(
     pokemon: Pokemon? = null,
     onNavigateUp: () -> Unit,
     pokemonAboutUiState: PokemonAboutViewModel.PokemonAboutUiState,
-    onPokemonAboutUiEvent: (PokemonAboutViewModel.PokemonAboutUiEvent) -> Unit
+    onPokemonAboutUiEvent: (PokemonAboutViewModel.PokemonAboutUiEvent) -> Unit,
+    pokemonBaseStatsUiState: PokemonBaseStatsViewModel.PokemonBaseStatsUiState,
+    onPokemonBaseStatsUiEvent: (PokemonBaseStatsViewModel.PokemonBaseStatsUiEvent) -> Unit,
 ) {
     Box {
         Box(
@@ -146,7 +152,9 @@ fun PokemonDetailScreen(
             PokemonDetailTabContent(
                 pokemon = pokemon,
                 pokemonAboutUiState = pokemonAboutUiState,
-                onPokemonAboutUiEvent = onPokemonAboutUiEvent
+                onPokemonAboutUiEvent = onPokemonAboutUiEvent,
+                pokemonBaseStatsUiState = pokemonBaseStatsUiState,
+                onPokemonBaseStatsUiEvent = onPokemonBaseStatsUiEvent
             )
         }
     }
@@ -219,7 +227,9 @@ fun PokemonDetailImage(pokemon: Pokemon?) {
 fun PokemonDetailTabContent(
     pokemon: Pokemon?,
     pokemonAboutUiState: PokemonAboutViewModel.PokemonAboutUiState,
-    onPokemonAboutUiEvent: (PokemonAboutViewModel.PokemonAboutUiEvent) -> Unit
+    onPokemonAboutUiEvent: (PokemonAboutViewModel.PokemonAboutUiEvent) -> Unit,
+    pokemonBaseStatsUiState: PokemonBaseStatsViewModel.PokemonBaseStatsUiState,
+    onPokemonBaseStatsUiEvent: (PokemonBaseStatsViewModel.PokemonBaseStatsUiEvent) -> Unit,
 ) {
     var tabIndex by remember {
         mutableStateOf(0)
@@ -268,7 +278,11 @@ fun PokemonDetailTabContent(
                 onUiEvent = onPokemonAboutUiEvent
             )
 
-            1 -> PokemonBaseStatsScreen()
+            1 -> PokemonBaseStatsScreen(
+                pokemon = pokemon,
+                uiState = pokemonBaseStatsUiState,
+                onUiEvent = onPokemonBaseStatsUiEvent
+            )
             2 -> PokemonMovesScreen()
         }
     }

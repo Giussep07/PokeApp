@@ -4,6 +4,7 @@ import com.apollographql.apollo3.ApolloCall
 import com.apollographql.apollo3.ApolloClient
 import com.giussepr.pokeserver.PokemonAboutQuery
 import com.giussepr.pokeserver.PokemonListQuery
+import com.giussepr.pokeserver.PokemonStatsQuery
 import javax.inject.Inject
 
 class PokeGraphApi @Inject constructor(private val apolloClient: ApolloClient) {
@@ -15,6 +16,12 @@ class PokeGraphApi @Inject constructor(private val apolloClient: ApolloClient) {
     fun queryPokemonAbout(pokemonId: Int): ApolloCall<PokemonAboutQuery.Data> {
         return apolloClient.query(
             PokemonAboutQuery(pokemon_id = pokemonId)
+        )
+    }
+
+    fun queryPokemonStats(pokemonId: Int): ApolloCall<PokemonStatsQuery.Data> {
+        return apolloClient.query(
+            PokemonStatsQuery(pokemon_id = pokemonId)
         )
     }
 }
