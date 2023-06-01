@@ -68,6 +68,7 @@ dependencies {
     implementation(libs.logging.interceptor)
     // Apollo GraphQL
     implementation(libs.apollo.runtime)
+    implementation(libs.apollo.mockserver)
 
     // Hilt Dependency Injection
     implementation(libs.hilt.android)

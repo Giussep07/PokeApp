@@ -48,6 +48,7 @@ logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", ver
 
 # Apollo GraphQL
 apollo-runtime = { module = "com.apollographql.apollo3:apollo-runtime", version.ref = "apolloGraphQl" }
+apollo-mockserver = { module = "com.apollographql.apollo3:apollo-mockserver", version.ref = "apolloGraphQl" }
 
 # Hilt
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
