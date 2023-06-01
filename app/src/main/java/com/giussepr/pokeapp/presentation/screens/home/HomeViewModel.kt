@@ -9,6 +9,7 @@ import com.giussepr.pokeapp.domain.model.ListViewType
 import com.giussepr.pokeapp.domain.model.pokemon.Pokemon
 import com.giussepr.pokeapp.domain.model.fold
 import com.giussepr.pokeapp.domain.usecase.GetPokemonsUseCase
+import com.giussepr.pokeapp.utils.DispatcherProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
@@ -19,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getPokemonsUseCase: GetPokemonsUseCase
+    private val getPokemonsUseCase: GetPokemonsUseCase,
+    private val dispatcherProvider: DispatcherProvider
 ) : ViewModel() {
 
     var uiState by mutableStateOf(HomeUiState())
@@ -35,7 +37,7 @@ class HomeViewModel @Inject constructor(
                     uiState = uiState.copy(errorMessage = it.message, isLoading = false)
                 })
         }.onStart { uiState = uiState.copy(isLoading = true) }
-            .flowOn(Dispatchers.IO)
+            .flowOn(dispatcherProvider.io)
             .launchIn(viewModelScope)
     }
 
