@@ -6,6 +6,7 @@ import com.giussepr.pokeapp.domain.model.DomainException
 import com.giussepr.pokeapp.domain.model.pokemon.Pokemon
 import com.giussepr.pokeapp.domain.model.Result
 import com.giussepr.pokeapp.domain.model.about.PokemonAbout
+import com.giussepr.pokeapp.domain.model.moves.PokemonMove
 import com.giussepr.pokeapp.domain.model.stats.PokemonStat
 import com.giussepr.pokeapp.domain.repository.PokemonRepository
 import kotlinx.coroutines.flow.Flow
@@ -57,6 +58,20 @@ class PokemonRepositoryImpl @Inject constructor(
             ?: emptyList()
 
         emit(Result.Success(pokemonStats))
+    }.catch {
+        emit(Result.Error(DomainException(it.message ?: "Algo ha salido mal, por favor intenta de nuevo")))
+    }
+
+    override fun getPokemonMoves(pokemonId: Int): Flow<Result<List<PokemonMove>>> = flow {
+        val response = pokeGraphApi.queryPokemonMoves(pokemonId).execute()
+
+        if (response.hasErrors()) {
+            emit(Result.Error(DomainException(response.errors?.get(0)?.message ?: "Algo ha salido mal, por favor intenta de nuevo")))
+        }
+
+        val pokemonMoves = response.data?.pokemon_v2_move?.map { it.mapToDomainModel() } ?: emptyList()
+
+        emit(Result.Success(pokemonMoves))
     }.catch {
         emit(Result.Error(DomainException(it.message ?: "Algo ha salido mal, por favor intenta de nuevo")))
     }

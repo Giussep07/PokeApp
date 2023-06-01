@@ -2,6 +2,7 @@ package com.giussepr.pokeapp.di
 
 import com.giussepr.pokeapp.domain.repository.PokemonRepository
 import com.giussepr.pokeapp.domain.usecase.GetPokemonAboutUseCase
+import com.giussepr.pokeapp.domain.usecase.GetPokemonMovesUseCase
 import com.giussepr.pokeapp.domain.usecase.GetPokemonStatsUseCase
 import com.giussepr.pokeapp.domain.usecase.GetPokemonsUseCase
 import dagger.Module
@@ -24,4 +25,8 @@ object UseCaseModule {
     @Provides
     fun provideGetPokemonStatsUseCase(pokemonRepository: PokemonRepository) =
         GetPokemonStatsUseCase(pokemonRepository)
+
+    @Provides
+    fun provideGetPokemonMovesUseCase(pokemonRepository: PokemonRepository) =
+        GetPokemonMovesUseCase(pokemonRepository)
 }
