@@ -8,8 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.giussepr.pokeapp.domain.model.fold
 import com.giussepr.pokeapp.domain.model.stats.PokemonStat
 import com.giussepr.pokeapp.domain.usecase.GetPokemonStatsUseCase
+import com.giussepr.pokeapp.utils.DispatcherProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -18,13 +18,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PokemonBaseStatsViewModel @Inject constructor(
-    private val getPokemonStatsUseCase: GetPokemonStatsUseCase
+    private val getPokemonStatsUseCase: GetPokemonStatsUseCase,
+    private val dispatcherProvider: DispatcherProvider
 ) : ViewModel() {
 
     var uiState by mutableStateOf(PokemonBaseStatsUiState())
         private set
 
-    private fun getPokemonBaseStats(pokemonId: Int) {
+    fun getPokemonBaseStats(pokemonId: Int) {
         getPokemonStatsUseCase.invoke(pokemonId).map { result ->
             result.fold(
                 onSuccess = { pokemonStats ->
@@ -36,7 +37,7 @@ class PokemonBaseStatsViewModel @Inject constructor(
             )
 
         }.onStart { uiState = uiState.copy(isLoading = true) }
-            .flowOn(Dispatchers.IO)
+            .flowOn(dispatcherProvider.io)
             .launchIn(viewModelScope)
     }
 
