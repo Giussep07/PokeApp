@@ -9,6 +9,7 @@ import com.giussepr.pokeapp.presentation.screens.home.HomeScreen
 import com.giussepr.pokeapp.presentation.screens.home.HomeViewModel
 import com.giussepr.pokeapp.presentation.screens.pokemondetail.PokemonDetailScreen
 import com.giussepr.pokeapp.presentation.screens.pokemondetail.PokemonDetailSharedViewModel
+import com.giussepr.pokeapp.presentation.screens.pokemondetail.about.PokemonAboutViewModel
 import com.giussepr.pokeapp.presentation.screens.splash.SplashScreen
 
 @Composable
@@ -33,9 +34,13 @@ fun AppNavigation(
             }
         }
         composable(AppScreens.PokemonDetail.route) {
+            val pokemonAboutViewModel: PokemonAboutViewModel = hiltViewModel()
+
             PokemonDetailScreen(
                 pokemonDetailSharedViewModel.pokemonDetail,
-                onNavigateUp = navController::navigateUp
+                onNavigateUp = navController::navigateUp,
+                pokemonAboutUiState = pokemonAboutViewModel.uiState,
+                onPokemonAboutUiEvent = pokemonAboutViewModel::onUiEvent
             )
         }
     }

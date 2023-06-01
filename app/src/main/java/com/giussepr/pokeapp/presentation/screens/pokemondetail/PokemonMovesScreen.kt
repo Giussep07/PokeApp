@@ -8,15 +8,15 @@ import com.giussepr.pokeapp.presentation.theme.PokeAppTheme
 
 @Preview
 @Composable
-fun PokemonAboutScreenPreview() {
+fun PokemonMovesScreenPreview() {
     PokeAppTheme {
-        PokemonAboutScreen()
+        PokemonMovesScreen()
     }
 }
 
 @Composable
-fun PokemonAboutScreen() {
+fun PokemonMovesScreen() {
     Column {
-        Text(text = "About")
+        Text(text = "Moves")
     }
 }

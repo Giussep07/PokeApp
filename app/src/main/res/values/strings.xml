@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">PokeApp</string>
+    <string name="height">Height</string>
+    <string name="breeding">Breeding</string>
+    <string name="gender">Gender</string>
+    <string name="egg_groups">Egg Groups</string>
+    <string name="egg_cycles">Egg Cycles</string>
+    <string name="abilities">Abilities</string>
+    <string name="weight">Weight</string>
 </resources>

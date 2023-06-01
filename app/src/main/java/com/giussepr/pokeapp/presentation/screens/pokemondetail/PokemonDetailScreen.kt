@@ -1,5 +1,6 @@
 package com.giussepr.pokeapp.presentation.screens.pokemondetail
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -39,15 +40,20 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.giussepr.pokeapp.R
+import com.giussepr.pokeapp.domain.model.about.PokemonAbility
+import com.giussepr.pokeapp.domain.model.about.PokemonAbout
+import com.giussepr.pokeapp.domain.model.about.PokemonEggGroup
 import com.giussepr.pokeapp.domain.model.pokemon.Pokemon
 import com.giussepr.pokeapp.domain.model.pokemon.PokemonType
 import com.giussepr.pokeapp.domain.model.pokemon.PokemonTypeAsset
+import com.giussepr.pokeapp.presentation.screens.pokemondetail.about.PokemonAboutScreen
+import com.giussepr.pokeapp.presentation.screens.pokemondetail.about.PokemonAboutViewModel
 import com.giussepr.pokeapp.presentation.theme.PokeAppTheme
 import com.giussepr.pokeapp.presentation.widgets.BackIconButton
 import com.giussepr.pokeapp.presentation.widgets.PokeAppTopAppBar
 
 @Composable
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 fun PokemonDetailScreenPreview() {
     PokeAppTheme {
         PokemonDetailScreen(
@@ -60,13 +66,51 @@ fun PokemonDetailScreenPreview() {
                     PokemonType(2, "Poison", PokemonTypeAsset.Poison)
                 )
             ),
-            onNavigateUp = {}
+            onNavigateUp = {},
+            pokemonAboutUiState = PokemonAboutViewModel.PokemonAboutUiState(
+                pokemonAbout = PokemonAbout(
+                    id = 1,
+                    name = "Balbasaur",
+                    height = 70,
+                    weight = 10,
+                    genderRate = 1,
+                    hatchCounter = 20,
+                    abilities = listOf(
+                        PokemonAbility(
+                            id = 1,
+                            name = "Ability 1"
+                        ),
+                        PokemonAbility(
+                            id = 2,
+                            name = "Ability 2"
+                        ),
+                        PokemonAbility(
+                            id = 3,
+                            name = "Ability 3"
+                        )
+                    ),
+                    eggGroups = listOf(
+                        PokemonEggGroup(
+                            name = "Egg Group 1"
+                        ),
+                        PokemonEggGroup(
+                            name = "Egg Group 2"
+                        ),
+                    ),
+                )
+            ),
+            onPokemonAboutUiEvent = {}
         )
     }
 }
 
 @Composable
-fun PokemonDetailScreen(pokemon: Pokemon? = null, onNavigateUp: () -> Unit) {
+fun PokemonDetailScreen(
+    pokemon: Pokemon? = null,
+    onNavigateUp: () -> Unit,
+    pokemonAboutUiState: PokemonAboutViewModel.PokemonAboutUiState,
+    onPokemonAboutUiEvent: (PokemonAboutViewModel.PokemonAboutUiEvent) -> Unit
+) {
     Box {
         Box(
             modifier = Modifier
@@ -89,7 +133,7 @@ fun PokemonDetailScreen(pokemon: Pokemon? = null, onNavigateUp: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             PokeAppTopAppBar(
-                title = pokemon?.name ?: "",
+                title = "",
                 navigationIcon = {
                     BackIconButton(onNavigateUp = onNavigateUp, iconColor = Color.White)
                 },
@@ -99,7 +143,11 @@ fun PokemonDetailScreen(pokemon: Pokemon? = null, onNavigateUp: () -> Unit) {
             )
             PokemonDetailTitle(pokemon = pokemon)
             PokemonDetailImage(pokemon = pokemon)
-            PokemonDetailTabContent()
+            PokemonDetailTabContent(
+                pokemon = pokemon,
+                pokemonAboutUiState = pokemonAboutUiState,
+                onPokemonAboutUiEvent = onPokemonAboutUiEvent
+            )
         }
     }
 }
@@ -168,7 +216,11 @@ fun PokemonDetailImage(pokemon: Pokemon?) {
 }
 
 @Composable
-fun PokemonDetailTabContent() {
+fun PokemonDetailTabContent(
+    pokemon: Pokemon?,
+    pokemonAboutUiState: PokemonAboutViewModel.PokemonAboutUiState,
+    onPokemonAboutUiEvent: (PokemonAboutViewModel.PokemonAboutUiEvent) -> Unit
+) {
     var tabIndex by remember {
         mutableStateOf(0)
     }
@@ -180,23 +232,23 @@ fun PokemonDetailTabContent() {
             .fillMaxSize()
             .background(
                 shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
-                color = Color.White
+                color = MaterialTheme.colorScheme.surface
             )
             .padding(16.dp)
     ) {
         TabRow(
             selectedTabIndex = tabIndex,
-            contentColor = Color.Black.copy(alpha = 0.8f),
-            containerColor = Color.White,
+            contentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+            containerColor = MaterialTheme.colorScheme.surface,
             indicator = { tabPositions ->
                 TabRowDefaults.Indicator(
                     Modifier.tabIndicatorOffset(tabPositions[tabIndex]),
-                    color = Color.Black.copy(alpha = 0.8f),
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
                     height = 2.dp
                 )
             },
             divider = {
-                Divider(color = Color.Black.copy(alpha = 0.2f))
+                Divider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f))
             },
             tabs = {
                 tabs.forEachIndexed { index, title ->
@@ -204,13 +256,18 @@ fun PokemonDetailTabContent() {
                         text = { Text(title) },
                         selected = tabIndex == index,
                         onClick = { tabIndex = index },
-                        selectedContentColor = Color.Black.copy(alpha = 0.8f),
-                        unselectedContentColor = Color.Black.copy(alpha = 0.6f),
+                        selectedContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                        unselectedContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                     )
                 }
             })
         when (tabIndex) {
-            0 -> PokemonAboutScreen()
+            0 -> PokemonAboutScreen(
+                pokemonId = pokemon?.id ?: -1,
+                uiState = pokemonAboutUiState,
+                onUiEvent = onPokemonAboutUiEvent
+            )
+
             1 -> PokemonBaseStatsScreen()
             2 -> PokemonMovesScreen()
         }
