@@ -8,8 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.giussepr.pokeapp.domain.model.fold
 import com.giussepr.pokeapp.domain.model.moves.PokemonMove
 import com.giussepr.pokeapp.domain.usecase.GetPokemonMovesUseCase
+import com.giussepr.pokeapp.utils.DispatcherProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -18,13 +18,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PokemonMovesViewModel @Inject constructor(
-    private val getPokemonMovesUseCase: GetPokemonMovesUseCase
+    private val getPokemonMovesUseCase: GetPokemonMovesUseCase,
+    private val dispatcherProvider: DispatcherProvider
 ): ViewModel() {
 
     var uiState: PokemonMovesUiState by mutableStateOf(PokemonMovesUiState())
         private set
 
-    private fun getPokemonMoves(pokemonId: Int) {
+    fun getPokemonMoves(pokemonId: Int) {
         getPokemonMovesUseCase.invoke(pokemonId).map { result ->
             result.fold(
                 onSuccess = { pokemonMoves ->
@@ -36,7 +37,7 @@ class PokemonMovesViewModel @Inject constructor(
             )
 
         }.onStart { uiState = uiState.copy(isLoading = true) }
-            .flowOn(Dispatchers.IO)
+            .flowOn(dispatcherProvider.io)
             .launchIn(viewModelScope)
     }
 
